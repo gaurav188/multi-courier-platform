@@ -7,20 +7,28 @@ import { MockCourierAdapter } from './adapters/mock-courier.adapter';
 
 @Injectable()
 export class CourierFactory {
-  // Registry defining which string maps to which class
   private readonly registry = {
     urbanebolt: UrbaneBoltAdapter,
     mock: MockCourierAdapter,
   };
 
-  constructor(private moduleRef: ModuleRef) {}
+  constructor(private readonly moduleRef: ModuleRef) {}
 
   getAdapter(courierPartner: string): ICourierAdapter {
-    const adapterClass = this.registry[courierPartner.toLowerCase()];
+    const normalizedPartner = courierPartner?.toLowerCase();
+    const adapterClass = this.registry[normalizedPartner];
     if (!adapterClass) {
-      throw new BadRequestException(`Courier partner '${courierPartner}' is not supported.`);
+      throw new BadRequestException({
+        message: 'Unknown courier partner.',
+        code: 'COURIER_NOT_SUPPORTED',
+        supported_couriers: this.getSupportedCouriers(),
+      });
     }
-    // Resolves the adapter instance from the NestJS DI container
+
     return this.moduleRef.get(adapterClass, { strict: false });
+  }
+
+  getSupportedCouriers(): string[] {
+    return Object.keys(this.registry);
   }
 }
