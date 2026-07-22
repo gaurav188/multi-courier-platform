@@ -5,11 +5,16 @@ import { CouriersModule } from './couriers/couriers.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: process.env.DATABASE_URL || 'postgresql://root:root@localhost:5432/courier_db',
-      autoLoadEntities: true,
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({
+        type: 'postgres' as const,
+        url: process.env.DATABASE_URL || 'postgresql://inno@localhost:5432/courier_db',
+        autoLoadEntities: true,
+        synchronize: true,
+        retryAttempts: 5,
+        retryDelay: 3000,
+        logging: false,
+      }),
     }),
     OrdersModule,
     CouriersModule,
