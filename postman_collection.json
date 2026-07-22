@@ -1,0 +1,66 @@
+{
+  "info": {
+    "name": "Multi Courier Platform API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create order",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"internal_order_id\": \"ORD-1001\",\n  \"courier_partner\": \"mock\",\n  \"customer_details\": {\n    \"name\": \"Jane\",\n    \"phone\": \"9999999999\"\n  },\n  \"package_details\": {\n    \"weight\": 1.2,\n    \"dimensions\": \"10x10x10\"\n  }\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/v1/orders",
+          "host": ["http://localhost:3000"],
+          "path": ["api", "v1", "orders"]
+        }
+      }
+    },
+    {
+      "name": "Track order",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/orders/ORD-1001/track",
+          "host": ["http://localhost:3000"],
+          "path": ["api", "v1", "orders", "ORD-1001", "track"]
+        }
+      }
+    },
+    {
+      "name": "Cancel order",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "http://localhost:3000/api/v1/orders/ORD-1001/cancel",
+          "host": ["http://localhost:3000"],
+          "path": ["api", "v1", "orders", "ORD-1001", "cancel"]
+        }
+      }
+    },
+    {
+      "name": "Bulk create orders",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "[{\n  \"internal_order_id\": \"BULK-1\",\n  \"courier_partner\": \"mock\"\n}, {\n  \"internal_order_id\": \"BULK-2\",\n  \"courier_partner\": \"urbanebolt\"\n}]"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/v1/orders/bulk",
+          "host": ["http://localhost:3000"],
+          "path": ["api", "v1", "orders", "bulk"]
+        }
+      }
+    }
+  ]
+}
